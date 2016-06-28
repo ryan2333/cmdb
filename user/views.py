@@ -228,5 +228,31 @@ def add_assets():
     idcs =  [('1', '北京-亦庄'), ('2', '北京-酒仙桥'), ('3', '北京-西单'), ('4', '北京-东单')]
     return render_template('assets_create.html',idcs=idcs)
 
+@app.route('/assets/create/', methods=['POST', 'GET'])
+def assets_create():
+    pa = request.form.get
+    sn = pa('sn')
+    ip = pa('ip')
+    hostname = pa('hostname')
+    os = pa('os')
+    purchase_date = pa('purchase_date')
+    warranty = pa('warranty')
+    vendor = pa('vendor')
+    model = pa('model')
+    idc_id = pa('idc')
+    admin = pa('admin')
+    business = pa('business')
+    cpu = pa('cpu')
+    mem = pa('mem')
+    disk = pa('disk')
+    print request.form
+
+    _is_ok, _error = assets.validate_create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk)
+    if _is_ok:
+        assets.create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk)
+        return json.dumps({'is_ok':'创建成功'})
+    else:
+        return json.dumps({'error': "\n".join(_error['error'])})
+
         # if __name__ == '__main__':
 #     app.run(host='0.0.0.0', port=9001, debug=True)

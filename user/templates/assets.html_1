@@ -76,36 +76,55 @@
 <script type="text/javascript" src="/static/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="/static/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 {% endblock %}
+
 {% block js %}
 <script type="text/javascript">
-jQuery(document).ready(function () {
-    jQuery('button[data-toggle="modalself"]').on('click', function (event) {
+/* jQuery(document).ready(function () {
+    jQuery('#add-assets').on('show.bs.modal', function (event) {
+        var button = jQuery(event.relatedTarget);
+        var title = button.data('title');
+        var btn_txt = button.data('btn-txt');
+        var url = button.data('url');
+        var that=this
+        console.log(url)
+        console.log(btn_txt)
+        console.log(title)
+        jQuery(that).find('.modal-title').text(title);
+        jQuery(that).find('.btn-form-submit').text(btn_txt);
+        jQuery(that).find('.modal-body').load(url);
+        return
+       jQuery.post(url, {}, function(result){
+            jQuery(that).find('.modal-body').html(result);
+        });
+    }); 
+
+
+jQuery('btn-form-submit').on('click',function(){
+            var _form = jQuery('#add-assets').find('form')
+            console.log(_form.attr('action'))
+            jQuery.post(_form.attr('action'), _form.serialize(),function(result){
+
+            }, 'json')
+        });
+    }) */
+jQuery(document).ready(function(){
+    jQuery('button[data-toggle="modalself"]').on('click',function(event){
         var button = jQuery(this);
         var title = button.data('title');
         var btn_txt = button.data('btn-txt');
         var url = button.data('url');
-        var that=jQuery('#add-assets');
+        var that = jQuery('#add-assets');
         jQuery(that).find('.modal-title').text(title);
-        jQuery(that).find('.btn-form-submit').text(btn_txt);
-        jQuery.post(url, {}, function(result){
+        jQuery(that).find('.btn-form-submit').text('btn_txt');
+        jQuery.post(url, {}, function(){
             jQuery(that).find('.modal-body').html(result);
         });
         jQuery(that).modal('show');
-    }); 
-
-
-    jQuery('.btn-form-submit').on('click',function(){
+    });
+    jQuery('btn-form-submit').on('click',function(){
         var _form = jQuery('#add-assets').find('form')
-        console.log(_form.attr('action'))
-        console.log(_form.serialize)
-        jQuery.post(_form.attr('action'), _form.serialize(),function(result){
-            if(result['is_ok']){
-                    alert('更新成功');
-                    jQuery('#add-assets').modal('hide');
-                    window.location.reload();
-                }else{
-                    alert(result['error'])
-                }
+        jQuery.post(_form.attr('action'), _form.serialize(), function(result){
+
         }, 'json')
     });
 })
