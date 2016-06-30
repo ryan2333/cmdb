@@ -43,7 +43,7 @@
             <td>{{asset['model']}}({{asset['vendor']}})</td>
             <td>
                 <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#dialog" data-title="修改资产" data-btn="修改" data-url="/assets/modify/?sn={{asset['sn']}}">修改</button>
-                <a class="btn btn-xs btn-danger" href="" onclick="return confirm('确定删除吗?');">删除</a>
+                <a class="btn btn-xs btn-danger" href="/assets/delete/?sn={{asset['sn']}}" onclick="return confirm('确定删除吗?');">删除</a>
             </td>
         </tr>
         {% endfor %}

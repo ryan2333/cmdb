@@ -258,7 +258,7 @@ def assets_create():
     cpu = pa('cpu')
     mem = pa('mem')
     disk = pa('disk')
-    print request.form
+
 
     _is_ok, _error = assets.validate_create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk)
     if _is_ok:
@@ -276,4 +276,44 @@ def assets_create():
 def assets_modify():
     sn = request.args.get('sn')
     _cnt, _assets = assets.get_by_id(sn)
-    return render_template('assets_create.html', assets=_assets)
+    idcs = [('1', '北京-亦庄'), ('2', '北京-酒仙桥'), ('3', '北京-西单'), ('4', '北京-东单')]
+    return render_template('assets_modify.html', assets=_assets, idcs=idcs)
+
+@app.route('/assets/update/', methods=['POST','GET'])
+@login_required
+def assets_update():
+    pa = request.form.get
+    sn = pa('sn')
+    ip = pa('ip')
+    hostname = pa('hostname')
+    os = pa('os')
+    purchase_date = pa('purchase_date')
+    warranty = pa('warranty')
+    vendor = pa('vendor')
+    model = pa('model')
+    idc_id = pa('idc')
+    admin = pa('admin')
+    business = pa('business')
+    cpu = pa('cpu')
+    mem = pa('mem')
+    disk = pa('disk')
+    _is_ok, _error = assets.validate_update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem,
+                      disk)
+    if _is_ok:
+        assets.update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem,
+                      disk, sn)
+        return json.dumps({'is_ok': '修改成功'})
+    else:
+        return json.dumps({'error': "\n".join(_error['error'])})
+
+
+@app.route('/assets/delete/', methods=['POST','GET'])
+@login_required
+def assets_delete():
+    aid = request.args.get('sn','')
+    print aid
+    _is_ok, _rt_list = assets.delete(aid)
+    if _is_ok:
+        return redirect('/assets/')
+    else:
+        return json.dumps({'error': '删除失败'})

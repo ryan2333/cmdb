@@ -39,7 +39,14 @@ def validate_create(sn, ip, hostname, os, purchase_date, warranty, vendor, model
         error['error'].append('SN号已存在')
         rt = False
         return Flase, error
-    if ip == '' or hostname == '' or os == '' or admin == '':
+    iplist = ip.split(',')
+    for i in iplist:
+        if 0<i<255 and i != '':
+            pass
+        else:
+            rt = False
+            error['error'].append('ip地址不符合规范')
+    if hostname == '' or os == '' or admin == '':
         rt = False
         error['error'].append('ip或主机或操作系统或使用人不能为空')
     if warranty.isdigit() and idc_id.isdigit() and cpu.isdigit() and mem.isdigit() and disk.isdigit():
@@ -65,25 +72,47 @@ def create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idcs, a
 在修改资产时对信息进行检查
 返回True/False, error_msg{}
 '''
-def validate_update():
-    return True, {}
+def validate_update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk):
+    error = {'error': []}
+    rt = True
+    iplist = ip.split('.')
+    print iplist
+    for i in iplist:
+        if 0 < int(i) < 255 and i != '':
+            pass
+        else:
+            rt = False
+            error['error'].append('ip地址不符合规范')
+    if ip == '' or hostname == '' or os == '' or admin == '':
+        rt = False
+        error['error'].append('操作系统或使用人不能为空')
+    if warranty.isdigit() and idc_id.isdigit() and cpu.isdigit() and mem.isdigit() and disk.isdigit():
+        pass
+    else:
+        rt = False
+        error['error'].append('保修时长或机房ID或cpu或内存或磁盘不是整数')
+    return rt, error
 
 
 '''
 更新资产,更新数据库
 返回True/False
 '''
-def update():
-    pass
-
-
+def update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk, sn):
+    _sql = 'update assets set ip=%s, hostname=%s, os=%s, purchase_date=%s, warranty=%s, vendor=%s, model=%s, idc_id=%s, admin=%s, business=%s, cpu=%s, mem=%s, disk=%s where sn=%s'
+    args = (ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk, sn)
+    execute_commit_sql(_sql, args)
+    return True
 
 '''
 删除资产,更新数据库
 返回True/False
 '''
-def delete():
-    pass
+def delete(aid):
+    _sql = 'update assets set status=1 where sn=%s'
+    args = (aid,)
+    _cnt, _rt_list = execute_commit_sql(_sql, args)
+    return _cnt, _rt_list
 
 
 if __name__ == '__main__':
