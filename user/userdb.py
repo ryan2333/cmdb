@@ -43,7 +43,7 @@ def validate_login(username, password):
 '''检查新建用户信息
 返回值: True/False, 错误信息
 '''
-def validate_add_user(username, password, age, phone, email):
+def validate_add_user(username, password, passwordrep, age, phone, email):
     if username.strip() == '':
         return False, u'用户名不能为空'
 
@@ -55,6 +55,8 @@ def validate_add_user(username, password, age, phone, email):
     #密码要求长度必须大于等于6
     if len(password) < 6:
         return False, u'密码必须大于等于6'
+    if password != passwordrep:
+        return False, u'两次输入密码不一致'
 
     if not str(age).isdigit() or int(age) <= 0 or int(age) > 100:
         return False, u'年龄必须是0到100的数字'

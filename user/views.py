@@ -89,6 +89,7 @@ def create_user():
 def add_user():
     username = request.form.get('username', '')
     password = request.form.get('password', '')
+    passwordrep = request.form.get('passwordrep', '')
     age = request.form.get('age', '')
     phone = request.form.get('phone', '')
     email = request.form.get('email','')
@@ -124,6 +125,7 @@ def modify_user():
     _age = ''
     _phone = ''
     _email = ''
+    print _user
     if _user is None:
         _error = '用户信息不存在'
     else:
@@ -134,7 +136,7 @@ def modify_user():
         _phone = _user.get('phone')
         _email = _user.get('email')
 
-    return render_template('user_modify.html', error=_error, password=_password, age=_age, phone=_phone, email=_email, username=_username, uid=_uid)
+    return render_template('user_modify.html', error=_error, user=_user)
 
 '''保存修改用户数据
 '''
@@ -157,12 +159,12 @@ def update_user():
         return json.dumps({'is_ok': _is_ok, 'error':_error})
 
 
-@app.route('/user/delete/', methods=['POST'])
+@app.route('/user/delete/')
 @login_required
 def delete_user():
-    uid = request.form.get('userid', '')
+    uid = request.args.get('userid', '')
     user.delete_user(uid)
-    return json.dumps({'is_ok':True})
+    return  redirect('/users/')
 
 
 @app.route('/logs/')
@@ -174,12 +176,20 @@ def logs():
     rt_list = loganalysis.get_topn(topn=topn)
     return render_template('logs.html', rt_list=rt_list, title='topn log')
 
-@app.route('/user/change-passwd', methods=['post'])
+
+@app.route('/user/changepass/')
+@login_required
+def change_pass():
+    uid = request.args.get('userid', '')
+    _user = user.get_user(uid)
+    return render_template('change_password.html', user=_user)
+
+@app.route('/user/change-passwd/', methods=['post'])
 @login_required
 def change_user_password():
     uid = request.form.get('userid')
     mpasswd = request.form.get('mgr-passwd')
-    npasswd = request.form.get('user-passwd-new')
+    npasswd = request.form.get('user-passwd')
     _is_ok, _error = user.validate_change_user_password(uid, npasswd, session['user']['username'], mpasswd)
     if _is_ok:
         user.change_user_password(uid, npasswd)
@@ -194,6 +204,7 @@ def logout():
     session.clear()
     print session
     return redirect('/')
+
 
 @app.route('/uploadlogs/', methods=['POST'])
 @login_required
@@ -217,18 +228,20 @@ def test():
 '''
 
 @app.route('/assets/', methods=['POST','GET'])
-#@login_required
+@login_required
 def assets_list():
     # 获取所有资产的信息
     _assets = assets.get_list()
     return render_template('assets.html', assets=_assets)
 
 @app.route('/assets/add/', methods=['POST','GET'])
+@login_required
 def add_assets():
     idcs =  [('1', '北京-亦庄'), ('2', '北京-酒仙桥'), ('3', '北京-西单'), ('4', '北京-东单')]
     return render_template('assets_create.html',idcs=idcs)
 
 @app.route('/assets/create/', methods=['POST', 'GET'])
+@login_required
 def assets_create():
     pa = request.form.get
     sn = pa('sn')
@@ -256,3 +269,11 @@ def assets_create():
 
         # if __name__ == '__main__':
 #     app.run(host='0.0.0.0', port=9001, debug=True)
+
+
+@app.route('/assets/modify/', methods=['POST', 'GET'])
+@login_required
+def assets_modify():
+    sn = request.args.get('sn')
+    _cnt, _assets = assets.get_by_id(sn)
+    return render_template('assets_create.html', assets=_assets)

@@ -11,7 +11,6 @@ def get_list():
     _sql = 'select {column} from assets where status=0'.format(column=_column)
     print _sql
     _cnt, _rt_list = execute_fetch_sql(_sql)
-    print _rt_list
     return [dict(zip(_columns, _line)) for _line in _rt_list]
 
 
@@ -21,9 +20,11 @@ def get_list():
 返回None/{}
 '''
 def get_by_id(aid):
+    _column = 'id,sn,ip,hostname,os,purchase_date,warranty,vendor,model,idc_id,admin,business,cpu,mem,disk'
+    _columns = _column.split(',')
     _sql = 'select * from assets where sn=%s'
-    _cnt, _rt_list = execute_fetch_sql(_sql, (aid))
-    return _cnt, _rt_list
+    _cnt, _rt_list = execute_fetch_sql(_sql, (aid,))
+    return _cnt, dict(zip(_columns,_rt_list[0]))
 
 
 '''
