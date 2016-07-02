@@ -38,7 +38,7 @@ def validate_create(sn, ip, hostname, os, purchase_date, warranty, vendor, model
     if _cnt:
         error['error'].append('SN号已存在')
         rt = False
-        return Flase, error
+        return rt, error
     iplist = ip.split(',')
     for i in iplist:
         if 0<i<255 and i != '':
@@ -76,13 +76,16 @@ def validate_update(ip, hostname, os, purchase_date, warranty, vendor, model, id
     error = {'error': []}
     rt = True
     iplist = ip.split('.')
-    print iplist
-    for i in iplist:
-        if 0 < int(i) < 255 and i != '':
-            pass
-        else:
-            rt = False
-            error['error'].append('ip地址不符合规范')
+    if len(iplist) == 4:
+        for i in iplist:
+            if 0<i<255 and i != '':
+                pass
+            else:
+                rt = False
+                error['error'].append('ip地址不符合规范')
+    else:
+        rt = False
+        error['error'].append('ip地址不符合规范')
     if ip == '' or hostname == '' or os == '' or admin == '':
         rt = False
         error['error'].append('操作系统或使用人不能为空')

@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.13, for osx10.11 (x86_64)
 --
--- Host: localhost    Database: mydb
+-- Host: localhost    Database: cmdb
 -- ------------------------------------------------------
 -- Server version	5.7.13
 
@@ -44,6 +44,92 @@ INSERT INTO `accesslog` VALUES ('111.85.34.165','/public/themes/adreambox/image/
 UNLOCK TABLES;
 
 --
+-- Table structure for table `assets`
+--
+
+DROP TABLE IF EXISTS `assets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `assets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sn` varchar(128) DEFAULT '' COMMENT 'sn编码',
+  `ip` varchar(128) DEFAULT '',
+  `hostname` varchar(64) DEFAULT NULL,
+  `os` varchar(32) DEFAULT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `warranty` int(11) NOT NULL,
+  `vendor` varchar(64) DEFAULT NULL,
+  `model` varchar(64) DEFAULT NULL,
+  `idc_id` int(11) DEFAULT NULL,
+  `admin` varchar(32) DEFAULT '',
+  `business` varchar(32) DEFAULT NULL,
+  `cpu` int(11) NOT NULL,
+  `mem` int(11) NOT NULL,
+  `disk` int(11) NOT NULL,
+  `status` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `assets`
+--
+
+LOCK TABLES `assets` WRITE;
+/*!40000 ALTER TABLE `assets` DISABLE KEYS */;
+INSERT INTO `assets` VALUES (1,'12334','10.13.5.11','inner01','centos6.5','2016-06-26',2,'ibm','aaaa',1,'yhzhao','p2p',8,32,500,0),(2,'110112','10.13.5.12','inner02','centos6.6','2016-06-01',1,'IBM','X3550M',1,'sdfsdf','p2p',8,16,100,0),(3,'110111','10.13.5.17','inner03','cent6.6','2016-06-01',2,'IBM','X3540M',3,'sdfsd','p2p',8,16,220,0),(4,'1122233','10.13.8.11','web01','centos5.8','2016-06-02',2,'IBM','X3450M',1,'dsfa','p2p',8,16,310,1);
+/*!40000 ALTER TABLE `assets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `idcs`
+--
+
+DROP TABLE IF EXISTS `idcs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `idcs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT '',
+  `status` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `idcs`
+--
+
+LOCK TABLES `idcs` WRITE;
+/*!40000 ALTER TABLE `idcs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `idcs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oses`
+--
+
+DROP TABLE IF EXISTS `oses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `osname` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oses`
+--
+
+LOCK TABLES `oses` WRITE;
+/*!40000 ALTER TABLE `oses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -58,7 +144,7 @@ CREATE TABLE `user` (
   `phone` varchar(20) DEFAULT NULL,
   `email` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,8 +153,31 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'user1','e10adc3949ba59abbe56e057f20f883e',22,'11012013012','user1@mail.com'),(3,'user2','e10adc3949ba59abbe56e057f20f883e',21,'11122233344','user2@mail.com'),(5,'user3','e10adc3949ba59abbe56e057f20f883e',15,'11122233344','user3@mail.com'),(6,'user4','e10adc3949ba59abbe56e057f20f883e',33,'11022033045','user4@mail.com'),(7,'user5','e10adc3949ba59abbe56e057f20f883e',11,'12345678901','user5@mail.com');
+INSERT INTO `user` VALUES (1,'user1','e10adc3949ba59abbe56e057f20f883e',22,'11012013012','user1@mail.com'),(3,'user2','e10adc3949ba59abbe56e057f20f883e',12,'11122233344','user2@mail.com'),(5,'user3','e10adc3949ba59abbe56e057f20f883e',15,'11122233344','user3@mail.com'),(7,'user5','b2332aa78d83be6ba6d2993d5c7ec69d',11,'12345678901','user5@mail.com'),(8,'user6','e10adc3949ba59abbe56e057f20f883e',14,'12345123412','user6@mail.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -80,4 +189,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-28 16:34:37
+-- Dump completed on 2016-07-02 12:42:48
