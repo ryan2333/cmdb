@@ -37,6 +37,11 @@
     <label for="add-assets-idc_id" class="control-label">机房ID:</label>
     <select name="idc">
       {% for id, value in idcs %}
+
+        {% if id == assets['idc_id'] %}
+            <option value="{{id}}" selected="selected">{{value}}</option>
+        {% endif %}
+
       <option value="{{id}}">{{value}}</option>
       {% endfor %}
     </select>

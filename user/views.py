@@ -276,7 +276,7 @@ def assets_create():
 def assets_modify():
     sn = request.args.get('sn')
     _cnt, _assets = assets.get_by_id(sn)
-    idcs = [('1', '北京-亦庄'), ('2', '北京-酒仙桥'), ('3', '北京-西单'), ('4', '北京-东单')]
+    idcs = [(1, '北京-亦庄'), (2, '北京-酒仙桥'), (3, '北京-西单'), (4, '北京-东单')]
     return render_template('assets_modify.html', assets=_assets, idcs=idcs)
 
 @app.route('/assets/update/', methods=['POST','GET'])
